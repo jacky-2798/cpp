@@ -47,7 +47,7 @@ again:;
 		       printf("Enter next value or q to quit:\n");
 		       break;
 		   }
-	    default :printf("Please a number from 1 to 5:\n");
+	    default :printf("Please enter a number from 1 to 5:\n");
 		     goto again;
 	}
     }
@@ -57,9 +57,6 @@ int calculate(float x,float y)
 {
     const float taxrate_15=0.15f, taxrate_28=0.28f;
     float tax;
-    if(x<=y)
-	tax = x * taxrate_15;
-    else
-	tax = y * taxrate_15 + (x-y)* taxrate_28;
+    tax = (x<=y) ? x * taxrate_15 : y * taxrate_15 + (x-y)* taxrate_28;
     return printf("The tax of %.2f$ is %.2f$.\n", x, tax);
 }
