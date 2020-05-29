@@ -102,7 +102,6 @@ int main(void)
 }
 float cal_charges(float i)
 {
-
     const float pounds_5=5, pounds_20=20;
     if(i<=pounds_5)
 	return CHARGES_5;
