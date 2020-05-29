@@ -7,10 +7,11 @@
 #define CHARGES_5 6.5f
 #define CHARGES_5_20 14.0f
 #define CHARGES_20PLUS 0.5f
-int calculate(float x);
+float calculate(float x, float y);
 int main(void)
 {
     char ch;
+    float pounds_a=0, pounds_b=0, pounds_c=0, pounds_total=0;
     printf("Please select what you want to order:\n"
 	    "-------------------------------------\n"
 	    "a) Artichokes\t\tb) Beets\n"
@@ -20,40 +21,50 @@ int main(void)
     {
 	switch(ch)
 	{
-	    case 'a':calculate(ARTICHOKES);
+	    case 'a':pounds_a+=calculate(ARTICHOKES, pounds_total);
 		     break;
-	    case 'b':calculate(BEETS);
+	    case 'b':pounds_b+=calculate(BEETS, pounds_total);
 		     break;
-	    case 'c':calculate(CARROTS);
+	    case 'c':pounds_c+=calculate(CARROTS, pounds_total);
 		     break;
-	    default:
 	}
+	pounds_total = pounds_a+pounds_b+pounds_c;
+	printf("What else do you want? (Enter q to settlement)\n"
+		"-------------------------------------\n"
+		"a) Artichokes\t\tb) Beets\n"
+		"c) Carrots\t\tq) To Settlement\n"
+		"-------------------------------------\n");
     }
 }
-int calculate(float x)
+float calculate(float x, float y)
 {
     const float pounds_5=5, pounds_20=20;
-    float num, num_total=0, cost;
-    int mark;
-    printf("How many do you want:\n");
+    float num, charges, num_total=0, cost, gross;
+    printf("How many do you want?\n"
+	    "Enter the number of pounds:\n");
     while((scanf("%f",&num))==1)
     {
 	num_total += num;
-	if(num_total<=pounds_5)
+	if(num_total+y<=pounds_5)
 	{
-	    cost = num_total*x+CHARGES_5;
-	    mark = 0;
+	    cost = num_total*x+(charges=CHARGES_5);
 	}
-	else if(num_total>pounds_5&&num<=pounds_20)
+	else if(num_total+y>pounds_5 && num_total+y<=pounds_20)
 	{
-	    cost = num_total*x+CHARGES_5_20;
-	    mark = 1;
+	    cost = num_total*x+(charges=CHARGES_5_20);
 	}
 	else
 	{
-	    cost = num_total*x+CHARGES_20PLUS;
-	    mark = 2;
+	    cost = num_total*x+(charges=CHARGES_5_20+((num_total+y)-pounds_20)*CHARGES_20PLUS);
 	}
-	cost = (cost>=POINT) ? cost*DISCOUNT : cost;
+	printf("---------------------------------\n"
+		"Gross price:\t%.2f\n", gross=cost-charges);
+	(cost>=POINT) ? printf("Discount price:\t%.2f\n", cost*=DISCOUNT) : cost;
+	printf("Shipping charge:\t%.2f\n", charges);
+	printf("Toltal:\t%.2f\n", cost);
+	printf("---------------------------------\n"
+		"Would you like to add more?\n"
+		"Enter the number of pounds(n to add to cart):\n");
     }
+    return num_total;
 }
